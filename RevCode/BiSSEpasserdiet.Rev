@@ -1,8 +1,11 @@
 #########################################################################################################
 #
-# BiSSE diploid-polyploid solanaceae
-
+# BiSSE Passerine Bird Diet
+# Presence-Absence of frugivore diet
+# Veronica Rincon Rubio
+# Last Updated: 09/13/19
 #########################################################################################################
+
 #######################
 # Reading the Data #
 #######################
@@ -25,11 +28,11 @@ taxa <- phylogeny.taxa()
 
 
 # set my move index
-mvi = 0
-mni = 0 ##que es
+mvi = 0 ## This is a counter for moves, the things that we propose to change the values of the parameters in the MCMC
+mni = 0 ##This is a counter for monitors, the things that we use to follow the MCMC and store the results.
 
 
-H = 0.587405
+
 
 
 ####################
@@ -38,8 +41,9 @@ H = 0.587405
 
 
 ### Create the constant prior parameters of the diversification rates
-## Number of surviving lineages is 5983
-rate_mean <- ln( ln(5983/2.0) / phylogeny.rootAge() )
+## Number of surviving lineages is 5015
+H = 0.587405
+rate_mean <- ln( ln(5015/2.0) / phylogeny.rootAge() )
 rate_sd <- 2*H
 
 
