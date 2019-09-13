@@ -7,10 +7,12 @@
 
 
 ##Reading data
-data2 = readCharacterDataDelimited(file="passerdiet/passerdiet/Data/paserdat.tsv", stateLabels=2, type="NaturalNumbers", delimiter=“\t”, headers=FALSE)
+data = readCharacterDataDelimited(file="passerdiet/passerdiet/Data/paserdat.tsv", stateLabels=2, type="NaturalNumbers", delimiter="\t", headers=FALSE)
 
 ##Reading phylogeny
 T <- readTrees(file="passerdiet/passerdiet/Data/Unarbol.tre")[1]
+
+mvi = 1 # Move counter
 
 ## Definition of hiper-priors
 #Hyperpriors, how many changes of each tipe do we expect on the tree?
@@ -48,20 +50,22 @@ moves[mvi++] = mvElementSwapSimplex(root_frequencies, weight=3)
 ctmc ~ dnPhyloCTMC(Q=Q, tree=T, nSites=1, rootFreq=root_frequencies, type="NaturalNumbers")
 
 #Fix our observations of selfing to the tips
-ctmc.clamp(data2)
+ctmc.clamp(data)
 
 # Some necessary defaults
 setOption("useScaling", "true")
 setOption("scalingDensity", "1")
 setOption("tolerance", "1e-9") # default 1e-09
 
-mymodel = model(T)
+####jalar todo el modelo pero no a partir del árbol
+mymodel = model(ctmc)
 
 #Output what we are going to see
 #####No me lo esta corriendo
 monitors[1] = mnScreen(printgen=10)
 monitors[2] = mnJointConditionalAncestralState(filename="passerdiet/passerdiet/Data/output/anc_states.log",printgen=10,tree=T,ctmc=ctmc,type="NaturalNumbers")
 monitors[3] = mnStochasticCharacterMap(ctmc=ctmc,printgen=10,filename="passerdiet/passerdiet/Data/output/stoch_mapspoledis.log", include_simmap=true)
+monitors[4] = mnModel(file="passerdiet/passerdiet/Data/output/mk_paser.log", printgen=1)
 
 mymcmc = mcmc(mymodel, monitors, moves)
 mymcmc.run(20000)
