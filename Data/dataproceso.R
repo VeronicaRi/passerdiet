@@ -14,6 +14,7 @@ setwd("~/passerdiet/passerdiet/Data/")
 
 ##cargando datos
 paserdat= read.csv("datosdoc.csv")
+summary(paserdat)
 pasertree<-read.nexus("passertree.nex")
 str(paserdat)
 
@@ -38,3 +39,10 @@ row.names(pasercar)<-matched$phy$tip.label
 head(pasercar)
 str(pasercar)
 write.table(pasercar, file="pasercar.tsv", sep="\t")
+
+
+##Verificando arbol
+pasertree<-read.nexus("ConsenseTreeP.nex")
+
+
+setdiff(paserdat$Name,pasertree$tip.label)

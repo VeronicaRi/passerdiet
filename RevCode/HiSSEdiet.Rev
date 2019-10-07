@@ -22,6 +22,7 @@ NUM_RATES = NUM_STATES * NUM_HIDDEN
 data = readCharacterDataDelimited(file="passerdiet/passerdiet/Data/paserdat.tsv", stateLabels=2, type="NaturalNumbers", delimiter="\t", headers=FALSE)
 
 
+
 ### Reading phylogeny 
 phylogeny = readTrees(file="passerdiet/passerdiet/Data/passertree.nex")[1]
 
@@ -71,7 +72,7 @@ speciation_beta[i] ~ dnExp(1.0)
 moves[++mvi] = mvScale(speciation_beta[i],lambda=0.20,tune=true,weight=2.0)
 
 ### Create an normal distributed variable for the turnover rate
-extinction_beta[i] ~ dnNormal(0.0,1.0)
+extinction_beta[i] ~ dnExp(1.0)
 moves[++mvi] = mvSlide(extinction_beta[i],delta=0.20,tune=true,weight=2.0)
 
 }
@@ -159,7 +160,7 @@ root <- phylogeny.rootAge()
 
 ### rho is the probability of sampling species at the present
 ### I did not add any sampling of species but it is posible by setting this rho parameter
-### fix this to 5021/5983
+### fix this to 5022/5983
 rho <- phylogeny.ntips()/5983
 
 #### construct a variable for the tree drawn from a birth death process
@@ -185,7 +186,7 @@ mymodel = model(rate_matrix)
 
 
 ### set up the monitors that will output parameter values to file and screen
-monitors[++mni] = mnModel(filename="filename="passerdiet/passerdiet/Data/output/HiSSE_diet.log", printgen=1)
+monitors[++mni] = mnModel(filename="passerdiet/passerdiet/Data/output/HiSSE_diet.log", printgen=1)
 monitors[++mni] = mnJointConditionalAncestralState(tree=timetree, cdbdp=timetree, type="NaturalNumbers", printgen=100, withTips=true, withStartStates=false, filename="passerdiet/passerdiet/Data/output/anc_states_HiSSE_diet.log")
 monitors[++mni] = mnScreen(printgen=10, Q, R)
 
@@ -202,7 +203,7 @@ mymcmc = mcmc(mymodel, monitors, moves, nruns=1, moveschedule="random")
 mymcmc.burnin(generations=5000,tuningInterval=100)
 
 ### run the MCMC
-mymcmc.run(generations=2000000)
+mymcmc.run(generations=10)
 
 
 ##############################

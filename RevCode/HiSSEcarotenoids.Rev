@@ -71,7 +71,7 @@ speciation_beta[i] ~ dnExp(1.0)
 moves[++mvi] = mvScale(speciation_beta[i],lambda=0.20,tune=true,weight=2.0)
 
 ### Create an normal distributed variable for the turnover rate
-extinction_beta[i] ~ dnNormal(0.0,1.0)
+extinction_beta[i] ~ dnExp(1.0)
 moves[++mvi] = mvSlide(extinction_beta[i],delta=0.20,tune=true,weight=2.0)
 
 }
@@ -185,9 +185,11 @@ mymodel = model(rate_matrix)
 
 
 ### set up the monitors that will output parameter values to file and screen
-monitors[++mni] = mnModel(filename="filename="passerdiet/passerdiet/Data/output/HiSSE_carotenoids.log", printgen=1)
+monitors[++mni] = mnModel(filename="passerdiet/passerdiet/Data/output/HiSSE_carotenoids.log", printgen=1)
 monitors[++mni] = mnJointConditionalAncestralState(tree=timetree, cdbdp=timetree, type="NaturalNumbers", printgen=100, withTips=true, withStartStates=false, filename="passerdiet/passerdiet/Data/output/anc_states_HiSSE_carotenoids.log")
 monitors[++mni] = mnScreen(printgen=10, Q, R)
+
+
 
 
 ################
@@ -202,7 +204,7 @@ mymcmc = mcmc(mymodel, monitors, moves, nruns=1, moveschedule="random")
 mymcmc.burnin(generations=5000,tuningInterval=100)
 
 ### run the MCMC
-mymcmc.run(generations=2000000)
+mymcmc.run(generations=1000000)
 
 
 ##############################
