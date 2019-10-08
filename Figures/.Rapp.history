@@ -1,0 +1,40 @@
+#biocLite("ggtree")#
+#biocLite("treeio")#
+library("ggplot2")#
+#library("RevGadgets")#
+library("wesanderson")
+### Colors#
+cols<-c(wes_palette("Darjeeling1"),wes_palette("Darjeeling2"))#
+cols2<- c("#7b3294","#c2a5cf","#a6dba0","#008837","#ffffbf")#
+cols3<-c("#ece2f0", "#67a9cf","#e31a1c","#fd8d3c","#02818a","#014636")
+setwd("~/Dropbox/paserdiet/passerdiet/Figures")
+source("multiplot.R")
+output.sse<-read.table("BiSSE_passercar.log", header=TRUE)
+head(output.sse)
+output.sse<-read.table("BiSSE_passercar.log", header=TRUE)#
+sse.extinction<-data.frame(dens=c(output.sse$extinction.1,output.sse$extinction.2),Type=rep(c("Absent Carotenoids","Presence carotenoids"),each=length(output.sse$extinction.1)))
+head(sse.extinction)
+sse.extinction<-data.frame(dens=c(output.sse$extinction.1,output.sse$extinction.2),Type=rep(c("Absent Carotenoids","Presence Carotenoids"),each=length(output.sse$extinction.1)))
+output.sse<-read.table("BiSSE_passercar.log", header=TRUE)#
+sse.extinction<-data.frame(dens=c(output.sse$extinction.1,output.sse$extinction.2),Type=rep(c("Absence Carotenoids","Presence Carotenoids"),each=length(output.sse$extinction.1)))#
+#
+sse.speciation<-data.frame(dens=c(output.sse$speciation.1,output.sse$speciation.2),Type=rep(c("Absence Carotenoids","Presence "),each=length(output.sse$speciation.1)))
+sse.netdiv<-data.frame(dens=c(output.sse$speciation.1-output.sse$extinction.1,output.sse$speciation.2-output.sse$extinction.2),Type=rep(c("Absence Carotenoids","Presence Carotenoids"),each=length(output.sse$speciation.1)))
+sse.reldiv<-data.frame(dens=c(output.sse$extinction.1/output.sse$speciation.1,output.sse$extinction.2/output.sse$speciation.2),Type=rep(c("Absence carotenoids","Presence Carotenoids"),each=length(output.sse$speciation.1)))
+trait.rates<-data.frame(dens=c(output.sse$rate_12,output.sse$rate_21),Type=rep(c("q01","q10"),each=length(output.sse$rate_1)))
+p1<-ggplot(sse.speciation, aes(x=dens, fill=Type))+labs(title="Speciation",x="Rate", y="Posterior Density")+geom_density(alpha=0.5)+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),#
+panel.background = element_blank(), axis.line = element_line(colour = "black"))+scale_fill_manual( values = c(cols[7],cols[1]))
+p1
+p2<-ggplot(sse.extinction, aes(x=dens, fill=Type))+labs(title="Extinction",x="Rate", y="Posterior Density")+geom_density(alpha=0.5)+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),#
+panel.background = element_blank(), axis.line = element_line(colour = "black"))+scale_fill_manual( values =c(cols[7],cols[1]))
+p2
+p3.1<-ggplot(sse.netdiv, aes(x=dens, fill=Type))+labs(title="Net Diversification",x="Rate", y="Posterior Density")+geom_density(alpha=0.5)+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),#
+panel.background = element_blank(), axis.line = element_line(colour = "black"))+scale_fill_manual( values = c(cols[7],cols[1]))
+p3.1
+p4<-ggplot(sse.reldiv, aes(x=dens, fill=Type))+labs(title="Relative Extinction",x="Rate", y="Posterior Density")+geom_density(alpha=0.5)+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),#
+panel.background = element_blank(), axis.line = element_line(colour = "black"))+scale_fill_manual( values = c(cols[7],cols[1]))
+p4
+p5<-ggplot(trait.rates, aes(x=dens, fill=Type))+labs(title="Trait change",x="Rate", y="Posterior Density")+geom_density(alpha=0.5)+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),#
+panel.background = element_blank(), axis.line = element_line(colour = "black"))+scale_fill_manual( values = c(cols[2],cols[4]))
+p5
+multiplot(p1,p3.1,p5,p2,p4, cols=2)

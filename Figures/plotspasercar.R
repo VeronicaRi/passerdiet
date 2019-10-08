@@ -1,7 +1,7 @@
 #biocLite("ggtree")
 #biocLite("treeio")
 library("ggplot2")
-library("RevGadgets")
+#library("RevGadgets")
 library("wesanderson")
 
 ### Colors
@@ -10,19 +10,19 @@ cols2<- c("#7b3294","#c2a5cf","#a6dba0","#008837","#ffffbf")
 cols3<-c("#ece2f0", "#67a9cf","#e31a1c","#fd8d3c","#02818a","#014636")
 #sampling<-seq(1,250000,100)
 ### Plots for diversification rates Bisse DP with diploidization
-#setwd("~/Dropbox/solploidypersonal/Figures")
+#setwd("~/Dropbox/paserdiet/passerdiet/Figures")
 source("multiplot.R")
 #source("plot_ancestral_states_2.R")
-output.sse<-read.table("~/Dropbox/solploidypersonal/bisse250K/output/BiSSE_polydip250K.log", header=TRUE)
-sse.extinction<-data.frame(dens=c(output.sse$extinction.1,output.sse$extinction.2),Type=rep(c("Diploid","Polyploid"),each=length(output.sse$extinction.1)))
+output.sse<-read.table("BiSSE_passercar.log", header=TRUE)
+sse.extinction<-data.frame(dens=c(output.sse$extinction.1,output.sse$extinction.2),Type=rep(c("Absence Carotenoids","Presence Carotenoids"),each=length(output.sse$extinction.1)))
 
-sse.speciation<-data.frame(dens=c(output.sse$speciation.1,output.sse$speciation.2),Type=rep(c("Diploid","Polyploid"),each=length(output.sse$speciation.1)))
+sse.speciation<-data.frame(dens=c(output.sse$speciation.1,output.sse$speciation.2),Type=rep(c("Absence Carotenoids","Presence "),each=length(output.sse$speciation.1)))
 
-sse.netdiv<-data.frame(dens=c(output.sse$speciation.1-output.sse$extinction.1,output.sse$speciation.2-output.sse$extinction.2),Type=rep(c("Diploid","Polyploid"),each=length(output.sse$speciation.1)))
+sse.netdiv<-data.frame(dens=c(output.sse$speciation.1-output.sse$extinction.1,output.sse$speciation.2-output.sse$extinction.2),Type=rep(c("Absence Carotenoids","Presence Carotenoids"),each=length(output.sse$speciation.1)))
 
-sse.reldiv<-data.frame(dens=c(output.sse$extinction.1/output.sse$speciation.1,output.sse$extinction.2/output.sse$speciation.2),Type=rep(c("Diploid","Polyploid"),each=length(output.sse$speciation.1)))
+sse.reldiv<-data.frame(dens=c(output.sse$extinction.1/output.sse$speciation.1,output.sse$extinction.2/output.sse$speciation.2),Type=rep(c("Absence carotenoids","Presence Carotenoids"),each=length(output.sse$speciation.1)))
 
-trait.rates<-data.frame(dens=c(output.sse$rate_12,output.sse$rate_21),Type=rep(c("Polyploidization","Diploidization"),each=length(output.sse$rate_1)))
+trait.rates<-data.frame(dens=c(output.sse$rate_12,output.sse$rate_21),Type=rep(c("q01","q10"),each=length(output.sse$rate_1)))
 
 
 p1<-ggplot(sse.speciation, aes(x=dens, fill=Type))+labs(title="Speciation",x="Rate", y="Posterior Density")+geom_density(alpha=0.5)+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
