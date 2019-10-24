@@ -129,8 +129,8 @@ moves[++mvi] = mvScale( rate_12, weight=2 )
 moves[++mvi] = mvScale( rate_21, weight=2 )
 
 q[1][2] := rate_12
-q[2][1] := rate_12
 q[2][1] := rate_21
+q[3][4] := rate_12
 q[4][3] := rate_21
 
 
