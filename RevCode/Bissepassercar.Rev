@@ -3,23 +3,21 @@
 # BiSSE Passerine Bird Carotenoids
 # Presence-Absence of carotenoid coloration
 # Veronica Rincon Rubio
-# Last Updated: 14/09/19
+# Last Updated: 10/21/2019
 #########################################################################################################
 
 
 #######################
 # Reading the Data #
 #######################
-
 setOption("useScaling","true")
-
 NUM_STATES = 2
 
 ### Read in the data
 
 data = readCharacterDataDelimited(file="passerdiet/passerdiet/Data/pasercar.tsv", stateLabels=2, type="NaturalNumbers", delimiter="\t", headers=FALSE)
 
-
+### Reading phylogeny
 phylogeny <- readTrees(file="passerdiet/passerdiet/Data/passertree.nex")[1]
 
 
@@ -31,6 +29,9 @@ taxa <- phylogeny.taxa()
 mvi = 0 ## This is a counter for moves, the things that we propose to change the values of the parameters in the MCMC
 mni = 0 ##This is a counter for monitors, the things that we use to follow the MCMC and store the results.
 
+H = 0.587405
+
+
 
 ####################
 # Create the rates #
@@ -38,9 +39,8 @@ mni = 0 ##This is a counter for monitors, the things that we use to follow the M
 
 
 ### Create the constant prior parameters of the diversification rates
-## Number of surviving lineages is 5021
-H = 0.587405
-rate_mean <- ln( ln(5021/2.0) / phylogeny.rootAge() )
+## Number of surviving lineages is 5983
+rate_mean <- ln( ln(5983/2.0) / phylogeny.rootAge() )
 rate_sd <- 2*H
 
 
@@ -48,7 +48,7 @@ for (i in 1:NUM_STATES) {
 
 ### Create a lognormal distributed variable for the diversification rate
 log_speciation[i] ~ dnNormal(mean=rate_mean,sd=rate_sd)
-log_speciation[i].setValue( rate_mean )
+log_ speciation[i].setValue( rate_mean )
 speciation[i] := exp( log_speciation[i] )
 moves[++mvi] = mvSlide(log_speciation[i],delta=0.20,tune=true,weight=3.0)
 
@@ -82,7 +82,7 @@ moves[++mvi] = mvScale( rate_21, weight=2 )
 
 
 ######################################################################
-# Create the rate matrix for the combined observed and hidden states #
+# Create the rate matrix #
 ######################################################################
 rate_matrix := fnFreeBinary( [rate_12, rate_21 ], rescaled=false)
 
@@ -103,7 +103,7 @@ root <- phylogeny.rootAge()
 
 ### I did not add any sampling of species but it is posible by setting this rho parameter
 ### rho is the probability of sampling species at the present
-### fix this to 5023/5983
+### fix this to 5022/5983
 rho <- phylogeny.ntips()/5983
 
 
@@ -154,7 +154,7 @@ mymcmc.burnin(generations=5000,tuningInterval=100)
 
 
 ### run the MCMC
-mymcmc.run(generations=500000)
+mymcmc.run(generations=250000)
 
 
 ##############################
@@ -162,7 +162,7 @@ mymcmc.run(generations=500000)
 ##############################
 
 #anc_states = readAncestralStateTrace("passerdiet/passerdiet/Data/output/anc_states_BiSSE_passerdiet.log")
-#anc_tree = ancestralStateTree(tree=phylogeny, ancestral_state_trace_vector=anc_states, include_start_states=false, file=""passerdiet/passerdiet/Data/output/output/anc_states_summaryBiSSEtree.tree", burnin=5000, summary_statistic="MAP", site=0)
+#anc_tree = ancestralStateTree(tree=phylogeny, ancestral_state_trace_vector=anc_states, include_start_states=false, file=""passerdiet/passerdiet/Data/output/output/anc_states_summaryBiSSEtreeCAR.tree", burnin=5000, summary_statistic="MAP", site=0)
 
 q()
 
