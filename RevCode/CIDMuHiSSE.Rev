@@ -118,8 +118,8 @@ moves[++mvi] = mvScale( rate_41, weight=2 )
 
 
 # first initialize the matrix with all zeros:
-for (i in 1:4) {
-for (j in 1:4) {
+for (i in 1:8) {
+for (j in 1:8) {
 q[i][j] := 0.0
 }
 }
@@ -166,7 +166,7 @@ q[8][4] := hidden_rate2
 # Create the rate matrix for the combined observed and hidden states #
 ######################################################################
 
-rate_matrix := fnHiddenStateRateMatrix(q, rescaled=false)
+rate_matrix := fnFreeK(q, rescaled=false)
 moves[++mvi] = mvBetaSimplex(rate_category_prior,tune=true,weight=2)
 moves[++mvi] = mvDirichletSimplex(rate_category_prior,tune=true,weight=2)
 
@@ -221,10 +221,10 @@ monitors[++mni] = mnScreen(printgen=10, q)
 mymcmc = mcmc(mymodel, monitors, moves, nruns=1, moveschedule="random")
 
 ### pre-burnin to tune the proposals
-mymcmc.burnin(generations=5000,tuningInterval=100)
+mymcmc.burnin(generations=1500,tuningInterval=100)
 
 ### run the MCMC
-mymcmc.run(generations=500000)
+mymcmc.run(generations=150000)
 
 
 

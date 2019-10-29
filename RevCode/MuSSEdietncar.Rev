@@ -2,7 +2,7 @@
 #
 # MuSSE Passerine Bird Diet
 # Veronica Rincon Rubio
-# Last Updated: 10/21/19
+# Last Updated: 10/26/19
 ##########################################################################################
 
 #######################
@@ -150,14 +150,7 @@ mymodel = model(rate_matrix)
 ### set up the monitors that will output parameter values to file and screen 
 monitors[++mni] = mnModel(filename="passerdiet/passerdiet/Data/output/MuSSE_dietncar.log", printgen=1)
 monitors[++mni] = mnJointConditionalAncestralState(tree=timetree, cdbdp=timetree, type="NaturalNumbers", printgen=100, withTips=true, withStartStates=false, filename="passerdiet/passerdiet/Data/output/anc_states_MuSSE_dietncar.log")
-monitors[++mni] = mnScreen(printgen=10, rate_12, speciation, extinction)
-monitors[++mni] = mnScreen(printgen=10, rate_21, speciation, extinction)
-monitors[++mni] = mnScreen(printgen=10, rate_23, speciation, extinction)
-monitors[++mni] = mnScreen(printgen=10, rate_32, speciation, extinction)
-monitors[++mni] = mnScreen(printgen=10, rate_34, speciation, extinction)
-monitors[++mni] = mnScreen(printgen=10, rate_43, speciation, extinction)
-monitors[++mni] = mnScreen(printgen=10, rate_14, speciation, extinction)
-monitors[++mni] = mnScreen(printgen=10, rate_41, speciation, extinction)
+monitors[++mni] = mnScreen(printgen=10, q)
 
 ##Es lo mismo poner monitors[++mni] = mnScreen(printgen=10, q)??
 
@@ -171,10 +164,10 @@ mymcmc = mcmc(mymodel, monitors, moves, nruns=1, moveschedule="random")
 
 
 ### pre-burnin to tune the proposals
-mymcmc.burnin(generations=50000,tuningInterval=100)
+mymcmc.burnin(generations=1500,tuningInterval=100)
 
 ### run the MCMC
-mymcmc.run(generations=500000)
+mymcmc.run(generations=150000)
 
 
 ##############################
