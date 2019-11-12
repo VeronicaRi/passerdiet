@@ -161,8 +161,8 @@ mymcmc.run(generations=150000)
 # Summarize ancestral states #
 ##############################
 
-#anc_states = readAncestralStateTrace("passerdiet/passerdiet/Data/output/anc_states_BiSSE_passerdiet.log")
-#anc_tree = ancestralStateTree(tree=phylogeny, ancestral_state_trace_vector=anc_states, include_start_states=false, file=""passerdiet/passerdiet/Data/output/output/anc_states_summaryBiSSEtreeCAR.tree", burnin=5000, summary_statistic="MAP", site=0)
+anc_states = readAncestralStateTrace("passerdiet/passerdiet/Data/output/anc_states_BiSSE_passerdiet.log")
+anc_tree = ancestralStateTree(tree=phylogeny, ancestral_state_trace_vector=anc_states, include_start_states=false, file=""passerdiet/passerdiet/Data/output/output/anc_states_summaryBiSSEtreeCAR.tree", burnin=5000, summary_statistic="MAP", site=0)
 
 q()
 
