@@ -4,7 +4,7 @@
 ## HiSSE: Hidden diversification
 ## Diet of passerine birds
 ## Veronica Rincon Rubio
-## Last Updated:21/10/2019
+## Last Updated:2/12/2019
 
 ######################
 
@@ -104,13 +104,13 @@ extinction[index] := exp( extinction_alpha[i] + extinction_beta[j-1] )
 
 ## I defined very loosely my gamma priors for rates in the Q-mat
 shape_pr <- 0.5
-##rate_pr := 1
+rate_pr := 1
 
 ############### Alternative definition or rate parameter
 # Each transition rate between observed states are drawn
 # from an exponential distribution with a mean of 40
 # character state transitions over the tree.
-rate_pr := phylogeny.treeLength() / 40
+# rate_pr := phylogeny.treeLength() / 40
 
 for (i in 1:4) {
 for (j in 1:4) {
@@ -208,7 +208,7 @@ mymcmc = mcmc(mymodel, monitors, moves, nruns=1, moveschedule="random")
 mymcmc.burnin(generations=1500,tuningInterval=100)
 
 ### run the MCMC
-mymcmc.run(generations=150000)
+mymcmc.run(generations=250000)
 
 
 ##############################
