@@ -67,6 +67,8 @@ moves[++mvi] = mvSlide(extinction_alpha[i],delta=0.20,tune=true,weight=3.0)
 }
 
 
+
+
 for (i in 1:NUM_HIDDEN) {
 
 ### Create an exponential distributed variable for the diversification rate
@@ -104,13 +106,13 @@ extinction[index] := exp( extinction_alpha[i] + extinction_beta[j-1] )
 
 ## I defined very loosely my gamma priors for rates in the Q-mat
 shape_pr <- 0.5
-##rate_pr := 1
+rate_pr := 1
 
 ############### Alternative definition or rate parameter
 # Each transition rate between observed states are drawn
 # from an exponential distribution with a mean of 40
 # character state transitions over the tree.
-rate_pr := phylogeny.treeLength() / 40
+#rate_pr := phylogeny.treeLength() / 40
 
 for (i in 1:4) {
 for (j in 1:4) {
@@ -150,7 +152,7 @@ q[4][2] := hidden_rate2
 # Create the rate matrix for the combined observed and hidden states #
 ######################################################################
 rate_matrix := fnFreeK(q, rescaled=false, matrixExponentialMethod="scalingAndSquaring")
-# asymmetric between hidden states is done with this new function fnFreeK
+
 
 #####################################
 # Set up the root state frequencies #

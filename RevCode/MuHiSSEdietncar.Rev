@@ -18,13 +18,13 @@ NUM_HIDDEN = 2
 NUM_RATES = NUM_STATES * NUM_HIDDEN
 
 ### Reading data
-data = readCharacterDataDelimited(file="passerdiet/passerdiet/Data/pasermuse.tsv", stateLabels=4, type="NaturalNumbers", delimiter="\t", headers=FALSE)
+data = readCharacterDataDelimited(file="/Users/veronicari/Documentos/GitHub/passerdiet/Data/pasermuse.tsv", stateLabels=4, type="NaturalNumbers", delimiter="\t", headers=FALSE)
 
 # we need to expand the data to the hidden states
 data_exp <- data.expandCharacters( NUM_HIDDEN )
 
 ### Reading phylogeny
-phylogeny <- readTrees(file="passer/passerdiet/Data/passertree.nex")[1]
+phylogeny <- readTrees(file="/Users/veronicari/Documentos/GitHub/passerdiet/Data/passertree.nex")[1]
 
 # Get some useful variables from the data. We need these later on.
 taxa <- phylogeny.taxa()
@@ -116,7 +116,7 @@ q[i][j] := 0.0
 
 ### Rate parameters in the Q matrix that aren't zero
 rate_12 ~ dnGamma(shape=shape_pr, rate=rate_pr) ### 0W to 1W
-rate_21 ~ dnGamma(shape=shape_pr, rate=rate_pr) ### 1W to 0W
+rate_21 ~ dnGamma(shape=shape_pr, rate=rate_pr) ### 0W to 1W
 rate_23 ~ dnGamma(shape=shape_pr, rate=rate_pr) ### 1W to 1C
 rate_32 ~ dnGamma(shape=shape_pr, rate=rate_pr) ### 1C to 1W
 rate_34 ~ dnGamma(shape=shape_pr, rate=rate_pr) ### 1C to 0C
@@ -184,9 +184,8 @@ q[8][4] := hidden_rate2
 # Create the rate matrix for the combined observed and hidden states #
 ######################################################################
 
-rate_matrix := fnFreek(q, rescaled=false)
-moves[++mvi] = mvBetaSimplex(rate_category_prior,tune=true,weight=2)
-moves[++mvi] = mvDirichletSimplex(rate_category_prior,tune=true,weight=2)
+rate_matrix := fnFreeK(q, rescaled=false)
+
 
 ### Create a constant variable with the prior probabilities of each rate category at the root.
 rate_category_prior ~ dnDirichlet( rep(1,NUM_RATES) )
@@ -225,10 +224,10 @@ timetree.clampCharData( data_exp )
 ### workspace model wrapper ###
 mymodel = model(rate_matrix)
 
-monitors[++mni] = mnModel(filename="passerdiet/passerdiet/Data/output/MuHiSSE_dietncar.log", printgen=1)
-monitors[++mni] = mnJointConditionalAncestralState(tree=timetree, cdbdp=timetree, type="NaturalNumbers", printgen=100, withTips=true, withStartStates=false, filename="passerdiet/passerdiet/Data/output/anc_states_MuHiSSE_dietncar.log")
+monitors[++mni] = mnModel(filename="/Users/veronicari/Documentos/GitHub/passerdiet/output/MuHiSSE_dietncar2.log", printgen=1)
+monitors[++mni] = mnJointConditionalAncestralState(tree=timetree, cdbdp=timetree, type="NaturalNumbers", printgen=100, withTips=true, withStartStates=false, filename="/Users/veronicari/Documentos/GitHub/passerdiet/output/anc_states_MuHiSSE_dietncar.log")
 monitors[++mni] = mnScreen(printgen=10, q)
-##??
+
 
 
 ################
